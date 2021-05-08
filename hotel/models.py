@@ -29,13 +29,13 @@ class Room(models.Model):
 class Reservation(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete= models.CASCADE)
     room = models.ForeignKey(Room, on_delete= models.CASCADE)
-    check_in = models.DateTimeField()
-    check_out = models.DateTimeField()
+    check_in = models.DateField()
+    check_out = models.DateField()
 
     def __str__(self):
         return f'{self.user} has booked {self.room} from {self.check_in} to {self.check_out}'
 
-def cehck_dispo(room, check_in, check_out):
+def check_dispo(room, check_in, check_out):
     disp_list = []
     res_list = Reservation.objects.filter(room= room)
     for res in res_list:
