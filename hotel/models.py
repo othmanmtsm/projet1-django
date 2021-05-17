@@ -14,6 +14,7 @@ class Room(models.Model):
         ('Studio', 'Studio Room')
     )
 
+    img = models.CharField(max_length=255)
     num = models.IntegerField()
     roomType = models.CharField(max_length=10 ,choices=ROOM_TYPES)
     beds = models.IntegerField()
@@ -33,7 +34,7 @@ class Reservation(models.Model):
     check_out = models.DateField()
 
     def __str__(self):
-        return f'{self.user} has booked {self.room} from {self.check_in} to {self.check_out}'
+        return f'booked {self.room.roomType} room from {self.check_in} to {self.check_out}'
 
 def check_dispo(room, check_in, check_out):
     disp_list = []

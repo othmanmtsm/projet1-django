@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Confirm reservation
+{% endblock title %}
+
+{% block body %}
+<div class="tm-section tm-bg-img" id="tm-section-1">
+    <div class="tm-bg-white ie-container-width-fix-2">
+        <div class="container ie-h-align-center-fix">
+            <div class="row">
+                <div class="col-xs-12 ml-auto mr-auto">
+                    <h3 class="text-center mt-3">Reserving {{room.roomType}} room with {{room.beds}} beds for {{room.capacity}} people for <span id="duration"></span> days</h2>
+                    <form  action="{% url 'confirm_res' %}" class="tm-search-form tm-section-pad-2" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="roomid" value="{{room.id}}">
+                        <div class="form-row tm-search-form-row">
+                            <div class="form-group">
+                                <h5 id="chkin">Check in date : </h5>
+                                <input type="hidden" name="chkin" id="chkin_input" value="">
+                            </div>
+                        </div>
+                        <div class="form-row tm-search-form-row">
+                            <div class="form-group">
+                                <h5 id="chkout">Check out date : </h5>
+                                <input type="hidden" name="chkout" id="chkout_input" value="">
+                            </div>
+                        </div>
+                        <div class="form-row tm-search-form-row">
+                            <div class="form-group">
+                                <h5>Price per night : <span id="price">{{room.price}}</span> DH</h5>
+                            </div>
+                        </div>
+                        <div class="form-row tm-search-form-row">
+                            <div class="form-group">
+                                <h5 id="r3j" hidden>Discount : <span id="r3jm">{{room.remise3j}}</span> DH</h5>
+                                <h5 id="r8j" hidden>Discount : <span id="r8jm">{{room.remise8j}}</span> DH</h5>
+                                <h5 id="nrm" hidden>Discount : 0 DH</h5>
+                            </div>
+                        </div>
+                        <div class="form-row tm-search-form-row">
+                            <div class="form-group">
+                                <h5>Total without discount : <span id="totalwd"></span></h5>
+                            </div>
+                        </div>
+                        <div class="form-row tm-search-form-row">
+                            <div class="form-group tm-form-element tm-form-element-50">
+                                <h5>Total : <span id="total"></span></h5>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary tm-btn-search">Confirm reservation</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}
+
+{% block customjs %}
+<script>
+        document.getElementById('chkin').textContent = localStorage.getItem('checkin');
+        document.getElementById('chkout').textContent = localStorage.getItem('checkout');
+
+        document.getElementById('chkin_input').setAttribute('value', localStorage.getItem('checkin'));
+        document.getElementById('chkout_input').setAttribute('value', localStorage.getItem('checkout'));
+
+        let checkin_ar = localStorage.getItem('checkin').split('-');
+        let checkin = new Date(checkin_ar[0], checkin_ar[1]-1, checkin_ar[2]);
+        let checkout_ar = localStorage.getItem('checkout').split('-');
+        let checkout = new Date(checkout_ar[0], checkout_ar[1]-1, checkout_ar[2]);
+        let diffDays = parseInt((checkout - checkin) / (1000 * 60 * 60 * 24), 10);
+        document.getElementById('duration').textContent = diffDays;
+        let price = parseFloat(document.getElementById('price').textContent);
+        let remise = 0;
+        let totalwd;
+        let total;
+        if (diffDays >= 3 && diffDays < 8) {
+            document.getElementById('r3j').removeAttribute('hidden');
+            remise = parseFloat(document.getElementById('r3jm').textContent);
+        }else if (diffDays >= 8) {
+            document.getElementById('r8j').removeAttribute('hidden');
+            remise = parseFloat(document.getElementById('r8jm').textContent);
+        }else{
+            document.getElementById('nrm').removeAttribute('hidden');
+        }
+        totalwd = diffDays * price;
+        document.getElementById('totalwd').textContent = (Math.round(totalwd * 100) / 100).toFixed(2) + ' DH';
+        total = totalwd - (remise * diffDays);
+        document.getElementById('total').textContent = (Math.round(total * 100) / 100).toFixed(2) + ' DH';
+</script>
+{% endblock customjs %}

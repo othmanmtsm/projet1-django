@@ -1,14 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rooms</title>
-</head>
-<body>
-    {% for room in rooms %}
-        <h3>{{room}}</h3>
-    {% endfor %}
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}
+Rooms
+{% endblock title %}
+
+{% block customcss %}
+<style>
+    i {
+        margin-left: 5px;
+    }
+</style>
+{% endblock customcss %}
+
+{% block body %}
+{% load static %}
+<div class="tm-section tm-section-pad tm-bg-gray" id="tm-section-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="tm-article-carousel row">
+                    {% for room in rooms %}
+                        <article class="tm-bg-white mr-2 tm-carousel-item col-3 mt-2">
+                            <img src="{% static room.img %}" alt="Image" class="img-fluid">
+                            <div class="tm-article-pad">
+                                <header><h3 class="text-uppercase tm-article-title-2">{{room.roomType}}</h3></header>
+                                <i class="fa fa-user"></i> {{room.capacity}}
+                                <i class="fa fa-bed"></i> {{room.beds}}
+                                <p>{{room.description}}</p>
+                                <a href="{% url 'book_room' pk=room.id %}" class="text-uppercase btn-primary tm-btn-primary">Reserve ${{room.price}}/night</a>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock title %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+    <link rel="stylesheet" href="{% static 'font-awesome-4.7.0/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'slick/slick.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'slick/slick-theme.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/datepicker.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/tooplate-style.css' %}">
+    {% block customcss %}
+    {% endblock customcss %}
+</head>
+<body>
+    <div class="tm-main-content" id="top">
+        <div class="tm-top-bar-bg"></div>
+        <div class="tm-top-bar" id="tm-top-bar">
+            <!-- Top Navbar -->
+            <div class="container">
+                <div class="row">
+                    <nav class="navbar navbar-expand-lg narbar-light">
+                        <a class="navbar-brand mr-auto" href="#">
+                            <img width="90" src="{% static 'img/logo.png' %}" alt="Site logo">
+                            Umbrella Hotel
+                        </a>
+                        <button type="button" id="nav-toggle" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div id="mainNav" class="collapse navbar-collapse tm-bg-white">
+                            <ul class="navbar-nav ml-auto">
+                                {% if user.is_authenticated %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'main_page' %}">Home <span class="sr-only">(current)</span></a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'reservation_list' %}">My reservations</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="logout">logout</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </div>                            
+                    </nav>            
+                </div>
+            </div>
+        </div>
+        {% block body %}
+        {% endblock body %}
+    </div>
+</body>
+<script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/datepicker.min.js' %}"></script>
+<script src="{% static 'js/jquery.singlePageNav.min.js' %}"></script>
+<script src="{% static 'slick/slick.min.js' %}"></script>
+{% block customjs %}
+{% endblock customjs %}
+</html>
